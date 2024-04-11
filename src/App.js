@@ -1,11 +1,18 @@
 import logo from "./logo.svg";
 import "./App.css";
+import { Outlet } from "react-router-dom";
+import Header from "./Components/Header";
+import Footer from "./Components/Footer";
 
 function App() {
   return (
-    <div className="p-10 bg-black w-full">
-      <p className="text-red-600">MERN</p>
-    </div>
+    <>
+      <Header />
+      <main>
+        <Outlet />{" "}
+      </main>{" "}
+      <Footer />
+    </>
   );
 }
 

@@ -2,9 +2,12 @@ import signinIcon from "../../assets/signin.gif";
 import { FaEye } from "react-icons/fa";
 import { useState } from "react";
 import { FaEyeSlash } from "react-icons/fa";
+import useApi from "../../Hooks/useApi";
 import { Link } from "react-router-dom";
 import { imageToBase64 } from "../../helpers/imageTobase64";
+import { env } from "../../utils/env";
 export default function Signup() {
+  console.log(env.backendUrl);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [data, setData] = useState({
@@ -14,6 +17,7 @@ export default function Signup() {
     confirmPassword: "",
     profilePic: "",
   });
+  const [apiFn, loading] = useApi();
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setData((data) => ({
@@ -21,8 +25,28 @@ export default function Signup() {
       [name]: value,
     }));
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (data.password !== data.confirmPassword) {
+      console.log("PASSOWRD MISMATCH");
+      return;
+    }
+    const response = await fetch(`${env.backendUrl}/api/signup`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    const userdata = await response.json();
+    // const { response, error } = await apiFn({
+    //   url: `${env.backendUrl}/api/signup`,
+    //   options: {
+    //     method: "POST",
+    //     body: { data },
+    //   },
+    // });
+    console.log("data", userdata);
   };
   const handleUploadPic = async (e) => {
     const file = e.target.files[0];
@@ -34,21 +58,27 @@ export default function Signup() {
 
     try {
       const image = await imageToBase64(file);
-      console.log(image);
+      setData((data) => ({
+        ...data,
+        profilePic: image,
+      }));
     } catch (error) {
       console.error("Error converting image to base64:", error);
     }
   };
-  console.log(data);
   return (
     <section className="w-full h-[100vh] flex items-center justify-center">
       <div className="mx-auto container p-4">
         <div className="bg-white p-4 w-full max-w-md mx-auto">
           <div className="w-20 h-20 mx-auto relative rounded-full overflow-hidden">
-            <img src={signinIcon} alt="login icon" />
+            <img
+              src={data?.profilePic ? data?.profilePic : signinIcon}
+              alt="login icon"
+              className="w-full h-full object-cover"
+            />
             <form>
               <label>
-                <div className="text-[12px] bg-opacity-80  pb-4 absolute bottom-0 w-full bg-slate-200 py-3 text-center">
+                <div className="text-[12px] bg-opacity-80 cursor-pointer pb-4 absolute bottom-0 w-full bg-slate-200 py-3 text-center">
                   Upload Photo
                 </div>
                 <input
@@ -68,6 +98,7 @@ export default function Signup() {
                   name="name"
                   value={data.name}
                   onChange={handleOnChange}
+                  required
                   placeholder="enter your name"
                   className="w-full h-full outline-none bg-transparent"
                 />
@@ -81,6 +112,7 @@ export default function Signup() {
                   name="email"
                   value={data.email}
                   onChange={handleOnChange}
+                  required
                   placeholder="enter email"
                   className="w-full h-full outline-none bg-transparent"
                 />
@@ -94,6 +126,7 @@ export default function Signup() {
                   name="password"
                   value={data.password}
                   onChange={handleOnChange}
+                  required
                   placeholder="enter password"
                   className="w-full h-full outline-none  bg-transparent"
                 />
@@ -115,8 +148,9 @@ export default function Signup() {
               <div className="bg-slate-100 flex items-center p-2">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
-                  name="password"
-                  value={data.password}
+                  name="confirmPassword"
+                  value={data.confirmPassword}
+                  required
                   onChange={handleOnChange}
                   placeholder="enter password"
                   className="w-full h-full outline-none  bg-transparent"

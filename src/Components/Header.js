@@ -3,17 +3,18 @@ import Logo from "../assets/techifyLogo.png";
 import { FaSearch } from "react-icons/fa";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { FaShoppingCart } from "react-icons/fa";
+import { Link } from "react-router-dom";
 export default function Header() {
   return (
-    <header className="h-20 shadow-md">
+    <header className="h-20 bg-white shadow-md">
       <div className="container h-full w-full max-w-screen-2xl flex items-center mx-auto px-4 justify-between">
-        <div>
+        <Link to="/">
           <img
             src={Logo}
             alt="Logo"
             className="w-[6rem] h-[5rem] object-contain"
           />
-        </div>
+        </Link>
         <div className="lg:flex hidden items-center border rounded-full pl-2 w-full justify-between max-w-sm focus-within:shadow-md">
           <input
             type="text"
@@ -24,11 +25,11 @@ export default function Header() {
             <FaSearch />
           </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-7">
           <div className="text-2xl cursor-pointer">
             <FaRegCircleUser />
           </div>
-          <div className="text-2xl relative cursor-pointer">
+          <div className="text-2xl  relative cursor-pointer">
             <span>
               <FaShoppingCart />
             </span>
@@ -36,6 +37,12 @@ export default function Header() {
               <p className="text-xs">0</p>
             </div>
           </div>
+          <Link
+            to="/login"
+            className="px-3 py-1 text-center text-white rounded-full bg-red-600 hover:bg-red-700"
+          >
+            Login
+          </Link>
         </div>
       </div>
     </header>

@@ -18,13 +18,13 @@ export default function Login() {
   };
   console.log(data);
   return (
-    <section>
+    <section className="w-full h-[100vh] flex items-center justify-center">
       <div className="mx-auto container p-4">
         <div className="bg-white p-4 w-full max-w-md mx-auto rounded">
           <div className="w-20 h-20 mx-auto">
             <img src={signinIcon} alt="login icon" />
           </div>
-          <form className="pt-6" onSubmit={handleSubmit}>
+          <form className="pt-6 flex flex-col gap-2" onSubmit={handleSubmit}>
             <div>
               <label>Email :</label>
               <div className="bg-slate-100 p-2">

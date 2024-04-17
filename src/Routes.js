@@ -12,24 +12,24 @@ import Signup from "./Pages/auth/Signup";
 
 const router = createBrowserRouter([
   {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
+  },
+  {
+    path: "forgot-password",
+    element: <ForgotPassowrd />,
+  },
+  {
     path: "/",
     element: <App />,
     children: [
       {
         path: "",
         element: <Home />,
-      },
-      {
-        path: "login",
-        element: <Login />,
-      },
-      {
-        path: "forgot-password",
-        element: <ForgotPassowrd />,
-      },
-      {
-        path: "signup",
-        element: <Signup />,
       },
     ],
   },

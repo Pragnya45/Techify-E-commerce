@@ -3,20 +3,22 @@ import { FaEye } from "react-icons/fa";
 import { useState } from "react";
 import { FaEyeSlash } from "react-icons/fa";
 import useApi from "../../Hooks/useApi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { imageToBase64 } from "../../helpers/imageTobase64";
 import { env } from "../../utils/env";
+import useNotification from "../../Hooks/useNotification";
 export default function Signup() {
-  console.log(env.backendUrl);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [data, setData] = useState({
     name: "",
-    mail: "",
+    email: "",
     password: "",
     confirmPassword: "",
     profilePic: "",
   });
+  const { showMessage } = useNotification();
+  const navigate = useNavigate();
   const [apiFn, loading] = useApi();
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -47,6 +49,12 @@ export default function Signup() {
     //   },
     // });
     console.log("data", userdata);
+    if (userdata.error) {
+      showMessage({ type: "error", value: userdata.message });
+      return;
+    }
+    showMessage({ type: "success", value: userdata.message });
+    navigate("/login");
   };
   const handleUploadPic = async (e) => {
     const file = e.target.files[0];
@@ -84,7 +92,7 @@ export default function Signup() {
                 <input
                   type="file"
                   className="hidden"
-                  onClick={handleUploadPic}
+                  onChange={handleUploadPic}
                 />
               </label>
             </form>

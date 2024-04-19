@@ -5,10 +5,13 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { RouterProvider } from "react-router-dom";
 import router from "./Routes";
+import { Toaster } from "sonner";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
+    <Toaster position="top-center" richColors />
+
     <RouterProvider router={router}>
       <App />
     </RouterProvider>

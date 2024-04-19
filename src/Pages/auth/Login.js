@@ -2,10 +2,14 @@ import signinIcon from "../../assets/signin.gif";
 import { FaEye } from "react-icons/fa";
 import { useState } from "react";
 import { FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { env } from "../../utils/env";
+import useNotification from "../../Hooks/useNotification";
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [data, setData] = useState({ email: "", password: "" });
+  const navigate = useNavigate();
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setData((data) => ({
@@ -13,8 +17,24 @@ export default function Login() {
       [name]: value,
     }));
   };
-  const handleSubmit = (e) => {
+  const { showMessage } = useNotification();
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const response = await fetch(`${env.backendUrl}/api/signin`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    const userdata = await response.json();
+    console.log("data", userdata);
+    if (userdata.error) {
+      showMessage({ type: "error", value: userdata.message });
+      return;
+    }
+    showMessage({ type: "success", value: userdata.message });
+    navigate("/");
   };
   console.log(data);
   return (

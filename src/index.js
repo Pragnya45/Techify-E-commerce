@@ -6,15 +6,18 @@ import reportWebVitals from "./reportWebVitals";
 import { RouterProvider } from "react-router-dom";
 import router from "./Routes";
 import { Toaster } from "sonner";
+import { Providers } from "./providers";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Toaster position="top-center" richColors />
+    <Providers>
+      <Toaster position="top-center" richColors />
 
-    <RouterProvider router={router}>
-      <App />
-    </RouterProvider>
+      <RouterProvider router={router}>
+        <App />
+      </RouterProvider>
+    </Providers>
   </React.StrictMode>
 );
 

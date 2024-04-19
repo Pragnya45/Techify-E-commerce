@@ -41,13 +41,7 @@ export default function Signup() {
       body: JSON.stringify(data),
     });
     const userdata = await response.json();
-    // const { response, error } = await apiFn({
-    //   url: `${env.backendUrl}/api/signup`,
-    //   options: {
-    //     method: "POST",
-    //     body: { data },
-    //   },
-    // });
+
     console.log("data", userdata);
     if (userdata.error) {
       showMessage({ type: "error", value: userdata.message });

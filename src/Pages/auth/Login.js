@@ -5,10 +5,13 @@ import { FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { env } from "../../utils/env";
 import useNotification from "../../Hooks/useNotification";
+import { profileFn } from "../../Redux/profileSlice";
+import { useDispatch } from "react-redux";
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [data, setData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -29,6 +32,12 @@ export default function Login() {
     });
     const userdata = await response.json();
     console.log("data", userdata);
+    dispatch(
+      profileFn({
+        isLoggedIn: true,
+        token: userdata.data,
+      })
+    );
     if (userdata.error) {
       showMessage({ type: "error", value: userdata.message });
       return;

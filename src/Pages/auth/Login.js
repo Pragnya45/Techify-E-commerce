@@ -1,17 +1,30 @@
 import signinIcon from "../../assets/signin.gif";
 import { FaEye } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { env } from "../../utils/env";
 import useNotification from "../../Hooks/useNotification";
 import { profileFn } from "../../Redux/profileSlice";
 import { useDispatch } from "react-redux";
+import Context from "../../Context";
+
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [data, setData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { showMessage } = useNotification();
+  const fetchUserdetails = async () => {
+    const response = await fetch(`${env.backendUrl}/api/user`, {
+      method: "GET",
+      credentials: "include",
+    });
+    const dataApi = await response.json();
+    console.log(dataApi);
+    const { name, email, profilePic } = dataApi.data;
+    dispatch(profileFn({ name, email, profilePic }));
+  };
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -20,11 +33,11 @@ export default function Login() {
       [name]: value,
     }));
   };
-  const { showMessage } = useNotification();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const response = await fetch(`${env.backendUrl}/api/signin`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "content-type": "application/json",
       },
@@ -32,17 +45,17 @@ export default function Login() {
     });
     const userdata = await response.json();
     console.log("data", userdata);
-    dispatch(
-      profileFn({
-        isLoggedIn: true,
-        token: userdata.data,
-      })
-    );
+    // dispatch(
+    //   profileFn({
+    //     token: userdata.data,
+    //   })
+    // );
     if (userdata.error) {
       showMessage({ type: "error", value: userdata.message });
       return;
     }
     showMessage({ type: "success", value: userdata.message });
+    fetchUserdetails();
     navigate("/");
   };
   console.log(data);

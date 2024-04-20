@@ -2,8 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import { logoutFn } from "./logoutSlice";
 
 const initialState = {
-  isLoggedIn: false,
-  token: "",
+  name: "",
+  email: "",
+  profilePic: "",
 };
 
 const profileSlice = createSlice({
@@ -16,6 +17,8 @@ const profileSlice = createSlice({
           state[key] = action.payload[key];
         }
       }
+      // state.user = action.payload;
+      // console.log(action.payload);
     },
   },
   extraReducers: (builder) => {
